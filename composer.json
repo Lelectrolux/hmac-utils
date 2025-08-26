@@ -1,0 +1,44 @@
+{
+  "name": "lelectrolux/hmac-utils",
+  "license": "proprietary",
+  "type": "library",
+  "description": "Utilities for Hmac authorisation",
+  "require": {
+    "php": "^8.4",
+    "guzzlehttp/guzzle": "^7.0",
+    "laravel/framework": "^12.0",
+    "psr/http-message": "^2.0",
+    "ramsey/uuid": "^4.5"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.24.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lelectrolux\\Hmac\\": "src/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Lelectrolux\\Hmac\\Laravel\\ServiceProvider"
+      ]
+    }
+  },
+  "authors": [
+    {
+      "name": "Lelectrolux",
+      "email": "Lelectrolux@users.noreply.github.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "scripts": {
+    "pint": [
+      "@php vendor/bin/pint --ansi"
+    ]
+  }
+}
