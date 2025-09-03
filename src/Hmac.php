@@ -40,26 +40,29 @@ final readonly class Hmac
         string $sign,
         string $key,
         UuidInterface $uuid,
-        string $content
+        string $queryString,
+        string $body,
     ): void {
-        if (! hash_equals($this->generateHmac($key, $content, $uuid), $sign)) {
+        if (! hash_equals($this->generateHmac($key, $queryString, $body, $uuid), $sign)) {
             throw InvalidHmacSignatureException::signatureDoesntMatch();
         }
     }
 
     public function generateHmac(
         string $key,
-        string $content,
+        string $queryString,
+        string $body,
         UuidInterface $uuid,
     ): string {
-        return hash_hmac('sha256', $key.$content.$uuid, $this->config[$key]);
+        return hash_hmac('sha256', $key.$queryString.$body.$uuid, $this->config[$key]);
     }
 
     public function generateHeaderValue(
         string $key,
-        string $content,
+        string $queryString,
+        string $body,
         UuidInterface $uuid,
     ): string {
-        return "{$key}:{$this->generateHmac($key, $content, $uuid)}:{$uuid}";
+        return "{$key}:{$this->generateHmac($key, $queryString, $body, $uuid)}:{$uuid}";
     }
 }

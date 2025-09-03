@@ -23,13 +23,15 @@ final class Middleware
     public function handle(Request $request, Closure $next, string ...$allowedKeys): Response
     {
         try {
+            $queryString = $request->getQueryString();
+
             [$key, $sign, $uuid] = $this->hmac->extractFromHeaderValue($request->headers->get('Authorization'));
 
             if ($allowedKeys !== [] && ! in_array($key, $allowedKeys, true)) {
                 throw InvalidHmacSignatureException::keyNotAllowed();
             }
 
-            $this->hmac->validateParts($sign, $key, $uuid, $request->getContent());
+            $this->hmac->validateParts($sign, $key, $uuid, $queryString, $request->getContent());
         } catch (InvalidHmacSignatureException $exception) {
             $this->exceptionHandler->report($exception);
 
@@ -40,7 +42,7 @@ final class Middleware
 
         $response = $next($request);
 
-        $response->headers->set('Authorization', $this->hmac->generateHeaderValue($key, $response->getContent(), $uuid));
+        $response->headers->set('Authorization', $this->hmac->generateHeaderValue($key, $queryString, $response->getContent(), $uuid));
 
         return $response;
     }
