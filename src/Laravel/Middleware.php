@@ -7,7 +7,6 @@ namespace Lelectrolux\Hmac\Laravel;
 use Closure;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Log\Context\Repository;
 use Lelectrolux\Hmac\Exceptions\InvalidHmacSignatureException;
 use Lelectrolux\Hmac\Hmac;
@@ -20,10 +19,10 @@ final class Middleware
         private ExceptionHandler $exceptionHandler,
     ) {}
 
-    public function handle(Request $request, Closure $next, string ...$allowedKeys): Response
+    public function handle(Request $request, Closure $next, string ...$allowedKeys): mixed
     {
         try {
-            $queryString = $request->getQueryString();
+            $queryString = $request->getQueryString() ?? '';
 
             [$key, $sign, $uuid] = $this->hmac->extractFromHeaderValue($request->headers->get('Authorization'));
 
