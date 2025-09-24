@@ -54,7 +54,7 @@ final readonly class Hmac
         string $body,
         UuidInterface $uuid,
     ): string {
-        return hash_hmac('sha256', $key.$queryString.$body.$uuid, $this->config[$key]);
+        return hash_hmac('sha3-256', $key.$queryString.$body.$uuid, $this->config[$key]);
     }
 
     public function generateHeaderValue(
